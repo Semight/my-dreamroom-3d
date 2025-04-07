@@ -1,21 +1,21 @@
-const { merge } = require('webpack-merge')
-const commonConfiguration = require('./webpack.common.js')
-const ip = require('internal-ip')
-const portFinderSync = require('portfinder-sync')
+import { merge } from 'webpack-merge'
+import commonConfiguration from './webpack.common.js'
+import { v4 } from 'internal-ip'
+import { getPort } from 'portfinder-sync'
 
 const infoColor = (_message) =>
 {
     return `\u001b[1m\u001b[34m${_message}\u001b[39m\u001b[22m`
 }
 
-module.exports = merge(
+export default merge(
     commonConfiguration,
     {
         mode: 'development',
         devServer:
         {
             host: '0.0.0.0',
-            port: portFinderSync.getPort(8080),
+            port: getPort(8080),
             contentBase: './dist',
             watchContentBase: true,
             open: true,
@@ -28,7 +28,7 @@ module.exports = merge(
             {
                 const port = server.options.port
                 const https = server.options.https ? 's' : ''
-                const localIp = ip.v4.sync()
+                const localIp = v4.sync()
                 const domain1 = `http${https}://${localIp}:${port}`
                 const domain2 = `http${https}://localhost:${port}`
                 
